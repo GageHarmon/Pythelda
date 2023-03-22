@@ -3,6 +3,7 @@ from settings import *
 from tile import Tile
 from player import Player
 from support import *
+from random import choice
 
 class Level:
     def __init__(self):
@@ -15,7 +16,12 @@ class Level:
     
     def create_map(self):
         layouts = {
-            'boundary': import_csv_layout('./map/map_FloorBlocks.csv')
+            'boundary': import_csv_layout('./map/map_FloorBlocks.csv'),
+            'grass': import_csv_layout('./map/map_Grass.csv'),
+            'object': import_csv_layout('./map/map_Object.csv'),
+        }
+        graphics = {
+            'grass': import_folder('./map/map_Grass')
         }
         
         for style, layout in layouts.items():
@@ -26,12 +32,17 @@ class Level:
                         y = row_index * TILESIZE
                         if style == 'boundary': 
                             Tile((x,y), [self.obstacle_sprites], 'invisible')
+                        if style == 'grass':
+                            random_grass_image = choice(graphics['grass'])
+                            Tile((x,y),[self.visible_sprites, self.obstacle_sprites], 'grass', random_grass_image)
+                        if style == 'object': 
+                            #create an object tile
                         
         #         if col == 'x':
         #             Tile((x,y),[self.visible_sprites, self.obstacle_sprites])
         #         if col == 'p':
         #             self.player = Player ((x,y),[self.visible_sprites],self.obstacle_sprites)
-        self.player = Player ((2000,1430),[self.visible_sprites],self.obstacle_sprites)
+                            self.player = Player ((2000,1430),[self.visible_sprites],self.obstacle_sprites)
     
     def run(self):
         #update and draw the game
