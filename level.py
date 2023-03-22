@@ -11,17 +11,18 @@ class Level:
         self.display_surface = pygame.display.get_surface()
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
-        
+        #sprite setup
         self.create_map()
     
     def create_map(self):
         layouts = {
             'boundary': import_csv_layout('./map/map_FloorBlocks.csv'),
             'grass': import_csv_layout('./map/map_Grass.csv'),
-            'object': import_csv_layout('./map/map_Object.csv'),
+            'object': import_csv_layout('./map/map_Objects.csv'),
         }
         graphics = {
-            'grass': import_folder('./map/map_Grass')
+            'grass': import_folder('./sprites/grass'),
+            'objects': import_folder('./sprites/objects')
         }
         
         for style, layout in layouts.items():
@@ -34,15 +35,15 @@ class Level:
                             Tile((x,y), [self.obstacle_sprites], 'invisible')
                         if style == 'grass':
                             random_grass_image = choice(graphics['grass'])
-                            Tile((x,y),[self.visible_sprites, self.obstacle_sprites], 'grass', random_grass_image)
+                            Tile((x,y), [self.visible_sprites, self.obstacle_sprites], 'grass', random_grass_image)  
                         if style == 'object': 
-                            #create an object tile
-                        
+                            surf = graphics['objects'][int(col)]
+                            Tile((x,y), [self.visible_sprites, self.obstacle_sprites], 'object', surf)
         #         if col == 'x':
         #             Tile((x,y),[self.visible_sprites, self.obstacle_sprites])
         #         if col == 'p':
         #             self.player = Player ((x,y),[self.visible_sprites],self.obstacle_sprites)
-                            self.player = Player ((2000,1430),[self.visible_sprites],self.obstacle_sprites)
+        self.player = Player ((2000,1430),[self.visible_sprites],self.obstacle_sprites)
     
     def run(self):
         #update and draw the game
