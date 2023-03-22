@@ -4,6 +4,7 @@ from tile import Tile
 from player import Player
 from support import *
 from random import choice
+from debug import debug
 
 class Level:
     def __init__(self):
@@ -39,16 +40,14 @@ class Level:
                         if style == 'object': 
                             surf = graphics['objects'][int(col)]
                             Tile((x,y), [self.visible_sprites, self.obstacle_sprites], 'object', surf)
-        #         if col == 'x':
-        #             Tile((x,y),[self.visible_sprites, self.obstacle_sprites])
-        #         if col == 'p':
-        #             self.player = Player ((x,y),[self.visible_sprites],self.obstacle_sprites)
+        
         self.player = Player ((2000,1430),[self.visible_sprites],self.obstacle_sprites)
-    
+        
     def run(self):
         #update and draw the game
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        debug(self.player.status)
         
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
